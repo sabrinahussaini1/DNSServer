@@ -52,9 +52,7 @@ password = 'sh8448@nyu.edu'
 input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(input_string, password, salt)  # exfil function
-print("Encrypted Value (Base64):", base64.urlsafe_b64encode(encrypted_value).decode('utf-8'))
 decrypted_value = decrypt_with_aes(encrypted_value, password, salt)  # exfil function
-#print("Decrypted Value:", decrypted_value)  # Should print "AlwaysWatching"
 
 # For future use
 def generate_sha256_hash(input_string):
@@ -156,10 +154,7 @@ def run_dns_server():
 
                     decrypted_value = decrypt_with_aes(encrypted_value_bytes, password, salt)
 
-                    # Create the TXT record with the encrypted value
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, encrypted_value_str)]
-
-
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
 
@@ -176,10 +171,10 @@ def run_dns_server():
             response.flags |= 1 << 10
 
             # Send the response back to the client using the `server_socket.sendto` method and put the response to_wire(), return to the addr you received from
-            print("Responding to request:", qname)
+            #print("Responding to request:", qname)
             server_socket.sendto(response.to_wire(),addr)
         except KeyboardInterrupt:
-            print('\nExiting...')
+            #print('\nExiting...')
             server_socket.close()
             sys.exit(0)
 
