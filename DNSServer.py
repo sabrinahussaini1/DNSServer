@@ -108,7 +108,7 @@ dns_records = {
 def run_dns_server():
     # Create a UDP socket and bind it to the local IP address and port
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_socket.bind(('127.0.0.1', 5354))
+    server_socket.bind(('127.0.0.1', 53))
 
     while True:
         try:
