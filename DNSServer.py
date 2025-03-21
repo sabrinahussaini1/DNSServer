@@ -96,12 +96,12 @@ def run_dns_server():
             # Wait for incoming DNS requests
             data, addr = server_socket.recvfrom(1024)
             # Parse the request using the `dns.message.from_wire` method
-            request = dns.message.from_wire(request)
+            request = dns.message.from_wire(data)
             # Create a response message using the `dns.message.make_response` method
-            response = dns.message.make_response(response)
+            response = dns.message.make_response(request)
 
             # Get the question from the request
-            question = request.question[1]
+            question = request.question[0]
             qname = question.name.to_text()
             qtype = question.rdtype
 
