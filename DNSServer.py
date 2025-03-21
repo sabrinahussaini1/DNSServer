@@ -102,7 +102,7 @@ dns_records = {
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],  # List of (preference, mail server) tuples
         dns.rdatatype.NS: 'ns1.nyu.edu.',
-        dns.rdatatype.TXT: str(encrypted_value)
+        dns.rdatatype.TXT: (str(encrypted_value),),
     }
 }
 
@@ -110,7 +110,7 @@ dns_records = {
 def run_dns_server():
     # Create a UDP socket and bind it to the local IP address and port
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_socket.bind(('127.0.0.1', 53))
+    server_socket.bind(('127.0.0.1', 5354))
 
     while True:
         try:
@@ -146,15 +146,10 @@ def run_dns_server():
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 elif qtype == dns.rdatatype.TXT:
                     encrypted_value_str = answer_data[0]
-                    print("Encrypted Value from TXT Record:", encrypted_value_str)  # Debugging
 
-                    encrypted_value_bytes = base64.urlsafe_b64decode(encrypted_value_str.encode('utf-8'))
-                    print("Encrypted Value Bytes (after base64 decode):", encrypted_value_bytes)  # Debugging
-
-                    decrypted_value = decrypt_with_aes(encrypted_value_bytes, password, salt)
-                    print("Decrypted Value:", decrypted_value)  # Debugging
-
+                    encrypted_value_bytes = ast.literal_eval(encrypted_value_str)
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, encrypted_value_str)]
+
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 else:
