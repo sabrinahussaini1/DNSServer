@@ -53,11 +53,9 @@ input_string = 'AlwaysWatching'
 
 # Encrypt the secret data
 encrypted_value = encrypt_with_aes(input_string, password, salt)
-print("Encrypted Value (Base64):", base64.urlsafe_b64encode(encrypted_value).decode('utf-8'))  # Debugging
 
 # Decrypt the secret data
 decrypted_value = decrypt_with_aes(encrypted_value, password, salt)
-print("Decrypted Value:", decrypted_value)  # Should print "AlwaysWatching"
 
 # For future use
 def generate_sha256_hash(input_string):
@@ -102,7 +100,7 @@ dns_records = {
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],  # List of (preference, mail server) tuples
         dns.rdatatype.NS: 'ns1.nyu.edu.',
-        dns.rdatatype.TXT: (str(encrypted_value),),
+        dns.rdatatype.TXT: str(encrypted_value,),
     }
 }
 
@@ -145,11 +143,7 @@ def run_dns_server():
                 elif qtype == dns.rdatatype.AAAA:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 elif qtype == dns.rdatatype.TXT:
-                    encrypted_value_str = answer_data[0]
-
-                    encrypted_value_bytes = ast.literal_eval(encrypted_value_str)
-                    rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, encrypted_value_str)]
-
+                    rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, data) for data in answer_data]
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 else:
