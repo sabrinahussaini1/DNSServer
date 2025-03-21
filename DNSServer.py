@@ -103,7 +103,7 @@ dns_records = {
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],  # List of (preference, mail server) tuples
         dns.rdatatype.NS: 'ns1.nyu.edu.',
-        dns.rdatatype.TXT: ('AlwaysWatching',),
+        dns.rdatatype.TXT: (str(encrypted_value)),
     # Add more records as needed (see assignment instructions!
 }
 }
@@ -183,5 +183,5 @@ def run_dns_server_user():
 
 if __name__ == '__main__':
     run_dns_server_user()
-    print("Encrypted Value:", encrypted_value)
-    print("Decrypted Value:", decrypted_value)
+    #print("Encrypted Value:", encrypted_value)
+   # print("Decrypted Value:", decrypted_value)
