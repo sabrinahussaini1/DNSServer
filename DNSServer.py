@@ -48,7 +48,7 @@ def decrypt_with_aes(encrypted_data, password, salt):
 
 
 salt = b'Tandon' # Remember it should be a byte-object
-password = 'sh8448@nyu.edu.'
+password = 'sh8448@nyu.edu'
 input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(input_string, password, salt)  # exfil function
@@ -103,7 +103,7 @@ dns_records = {
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],  # List of (preference, mail server) tuples
         dns.rdatatype.NS: 'ns1.nyu.edu.',
-        dns.rdatatype.TXT: (str(encrypted_value)),
+        dns.rdatatype.TXT: (encrypted_value.decode('utf-8'),)
     # Add more records as needed (see assignment instructions!
 }
 }
