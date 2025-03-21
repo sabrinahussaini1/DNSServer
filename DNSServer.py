@@ -48,7 +48,7 @@ def decrypt_with_aes(encrypted_data, password, salt):
 
 
 salt = os.urandom(16) # Remember it should be a byte-object
-password = 'sh8448@nyu.edu'
+password = 'sh8448@nyu.edu.'
 input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(input_string, password, salt)  # exfil function
