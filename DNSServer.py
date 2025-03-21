@@ -43,7 +43,7 @@ def encrypt_with_aes(input_string, password, salt):
 def decrypt_with_aes(encrypted_data, password, salt):
     key = generate_aes_key(password,salt)
     f = Fernet(key)
-    decrypted_data = f.decrypt(input_string)  # call the Fernet decrypt method
+    decrypted_data = f.decrypt(encrypted_data)  # call the Fernet decrypt method
     return decrypted_data.decode('utf-8')
 
 
@@ -53,7 +53,6 @@ input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(input_string, password, salt)  # exfil function
 decrypted_value = decrypt_with_aes(encrypted_value, password, salt)  # exfil function
-
 
 # For future use
 def generate_sha256_hash(input_string):
