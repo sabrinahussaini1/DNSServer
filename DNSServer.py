@@ -104,8 +104,9 @@ dns_records = {
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],  # List of (preference, mail server) tuples
         dns.rdatatype.NS: 'ns1.nyu.edu.',
-        dns.rdatatype.TXT: (encrypted_value,),
-    # Add more records as needed (see assignment instructions!
+        dns.rdatatype.TXT: (base64.urlsafe_b64encode(encrypted_value).decode('utf-8'),),
+
+        # Add more records as needed (see assignment instructions!
 }
 }
 
@@ -149,9 +150,8 @@ def run_dns_server():
                 elif qtype == dns.rdatatype.AAAA:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 elif qtype == dns.rdatatype.TXT:
-                    encrypted_bytes = answer_data[0]  # Retrieve the encrypted data directly
-                    decrypted_value = decrypt_with_aes(encrypted_bytes, password, salt)
-                    rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, decrypted_value)]
+                    encrypted_value_str = answer_data[0]
+                    rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, encrypted_value_str)]
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 else:
