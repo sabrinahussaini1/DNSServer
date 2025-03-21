@@ -148,7 +148,7 @@ def run_dns_server():
                 elif qtype == dns.rdatatype.AAAA:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 elif qtype == dns.rdatatype.TXT:
-                    rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, data) for data in answer_data]
+                    rdata_list = [dns.rdtypes.ANY.TXT.TXT(dns.rdataclass.IN, qtype, data)]
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 else:
