@@ -1,4 +1,3 @@
-
 import dns.message
 import dns.rdatatype
 import dns.rdataclass
@@ -53,6 +52,7 @@ password = 'sh8448@nyu.edu'
 input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(input_string, password, salt)  # exfil function
+print("Encrypted Value (Base64):", base64.urlsafe_b64encode(encrypted_value).decode('utf-8'))
 decrypted_value = decrypt_with_aes(encrypted_value, password, salt)  # exfil function
 #print("Decrypted Value:", decrypted_value)  # Should print "AlwaysWatching"
 
@@ -152,9 +152,17 @@ def run_dns_server():
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
                 elif qtype == dns.rdatatype.TXT:
                     encrypted_value_str = answer_data[0]
+                    encrypted_value_bytes = base64.urlsafe_b64decode(encrypted_value_str.encode('utf-8'))
+
+                    decrypted_value = decrypt_with_aes(encrypted_value_bytes, password, salt)
+
+                    # Create the TXT record with the encrypted value
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, encrypted_value_str)]
+
+
                 elif qtype == dns.rdatatype.A:
                     rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
+
                 else:
                     if isinstance(answer_data, str):
                         rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
